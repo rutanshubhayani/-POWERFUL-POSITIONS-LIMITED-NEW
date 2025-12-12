@@ -1274,7 +1274,12 @@
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+
+    .about-hero-content {
+
+        text-align: center;
+    }
+
     .about-hero-content .glitch-wrapper {
         font-size: 3.5rem;
     }
