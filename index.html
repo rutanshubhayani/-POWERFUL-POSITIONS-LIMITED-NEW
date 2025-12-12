@@ -234,7 +234,6 @@
                             </ul>
                             <div class="program-actions">
                                 <a href="assets/pages/service.html" class="btn-primary">Start Now</a>
-                                <a href="#" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -266,7 +265,6 @@
                             </ul>
                             <div class="program-actions">
                                 <a href="assets/pages/service.html" class="btn-primary">View Schedule</a>
-                                <a href="#" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -298,7 +296,6 @@
                             </ul>
                             <div class="program-actions">
                                 <a href="assets/pages/service.html" class="btn-primary">Explore Area</a>
-                                <a href="#" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -332,7 +329,6 @@
                             </ul>
                             <div class="program-actions">
                                 <a href="assets/pages/service.html" class="btn-primary">Start Lifting</a>
-                                <a href="#" class="btn-link">Learn More <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -407,7 +403,7 @@
                         </li>
                     </ul>
 
-                    <button class="plan-btn">
+                    <button class="plan-btn" onclick="goToCheckout('standard', 'Standard', 49, '/month', ['Gym Access (6AM - 10PM)', 'Locker Room Access', 'Basic Equipment Access'])">
                         <span>Choose Standard</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -458,7 +454,7 @@
                         </li>
                     </ul>
 
-                    <button class="plan-btn featured-btn">
+                    <button class="plan-btn featured-btn" onclick="goToCheckout('pro-athlete', 'Pro Athlete', 89, '/month', ['24/7 Gym Access', 'All Group Classes', 'Sauna & Recovery', '2 Free PT Sessions', 'Nutrition Consultation'])">
                         <span>Choose Pro</span>
                         <i class="fas fa-crown"></i>
                     </button>
@@ -504,7 +500,7 @@
                         </li>
                     </ul>
 
-                    <button class="plan-btn">
+                    <button class="plan-btn" onclick="goToCheckout('elite-champion', 'Elite Champion', 149, '/month', ['All Pro Features', 'Unlimited Personal Training', 'Custom Nutrition Plan', 'Private Locker', 'VIP Amenities'])">
                         <span>Choose Elite</span>
                         <i class="fas fa-rocket"></i>
                     </button>
@@ -535,14 +531,13 @@
                 <p>Join thousands of elite members who've already unlocked their true potential.</p>
                 
                 <div class="cta-form">
-                    <div class="form-group">
-                        <input type="email" placeholder="Enter your email" class="cta-input">
-                        <button class="cta-btn">
-                            <span>Start Free Trial</span>
-                            <i class="fas fa-rocket"></i>
-                        </button>
+                    <div class="form-group single-action">
+                        <a href="contact.html" class="cta-btn">
+                            <span>Contact Us</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </a>
                     </div>
-                    <p class="form-note">No credit card required. 7-day free trial.</p>
+                    <p class="form-note">Speak with our team to start your transformation.</p>
                 </div>
                 
                 <div class="cta-features">

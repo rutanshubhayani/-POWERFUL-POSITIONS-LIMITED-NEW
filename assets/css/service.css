@@ -35,11 +35,10 @@
 }
 
 .service-hero-content {
-    text-align: center;
     z-index: 2;
     position: relative;
     animation: fadeInUp 1.2s ease-out;
-    margin-top: 4rem;
+    margin-top: 5rem;
 }
 
 .service-hero-content .hero-tag {
@@ -77,6 +76,7 @@
     max-width: 700px;
     line-height: 1.6;
     animation: fadeInUp 1.2s ease-out 0.3s both;
+    text-align: center;
 }
 
 .hero-features {

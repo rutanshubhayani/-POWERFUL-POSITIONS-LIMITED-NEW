@@ -77,7 +77,7 @@
                         <span class="period">per session</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('personal-training', 'Personal Training', 150, 'per session', ['Custom workout design', 'Biomechanical analysis', 'Nutrition optimization', 'Progress tracking', '24/7 support access'])">
                         <span>Book Session</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -106,7 +106,7 @@
                         <span class="period">per class</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('group-classes', 'Group Classes', 35, 'per class', ['HIIT & Strength classes', 'Martial arts training', 'Yoga & mobility', 'Olympic lifting', 'Functional fitness'])">
                         <span>Join Class</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -134,7 +134,7 @@
                         <span class="period">per session</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('recovery-wellness', 'Recovery & Wellness', 75, 'per session', ['Cryotherapy sessions', 'Infrared sauna', 'Massage therapy', 'Compression therapy', 'Recovery monitoring'])">
                         <span>Book Recovery</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -162,7 +162,7 @@
                         <span class="period">per consultation</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('nutrition-coaching', 'Nutrition Coaching', 120, 'per consultation', ['Metabolic analysis', 'Custom meal plans', 'Supplement guidance', 'Body composition tracking', 'Lifestyle integration'])">
                         <span>Get Started</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -190,7 +190,7 @@
                         <span class="period">per assessment</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('performance-testing', 'Performance Testing', 200, 'per assessment', ['3D movement analysis', 'VO2 max testing', 'Force plate assessment', 'Flexibility screening', 'Detailed reports'])">
                         <span>Book Test</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -218,7 +218,7 @@
                         <span class="period">per session</span>
                     </div>
 
-                    <button class="service-btn">
+                    <button class="service-btn" onclick="goToCheckout('mind-body-training', 'Mind-Body Training', 90, 'per session', ['Meditation sessions', 'Breathwork training', 'Stress management', 'Performance psychology', 'Mindfulness coaching'])">
                         <span>Start Journey</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -264,7 +264,7 @@
                         </div>
                     </div>
 
-                    <button class="package-btn">
+                    <button class="package-btn" onclick="goToCheckout('starter', 'Elite Starter', 299, '/month', ['Unlimited gym access', '4 group classes/week', 'Basic nutrition guide', 'Progress tracking app'])">
                         <span>Get Started</span>
                         <i class="fas fa-rocket"></i>
                     </button>
@@ -303,7 +303,7 @@
                         </div>
                     </div>
 
-                    <button class="package-btn">
+                    <button class="package-btn" onclick="goToCheckout('pro', 'Elite Pro', 599, '/month', ['Everything in Starter', '2 personal training sessions', '2 recovery sessions', 'Mind-body coaching', 'Custom nutrition plan'])">
                         <span>Choose Pro</span>
                         <i class="fas fa-rocket"></i>
                     </button>
@@ -341,7 +341,7 @@
                         </div>
                     </div>
 
-                    <button class="package-btn">
+                    <button class="package-btn" onclick="goToCheckout('champion', 'Elite Champion', 999, '/month', ['Everything in Pro', 'Dedicated coach', 'Monthly performance testing', 'VIP amenities access', '24/7 support hotline'])">
                         <span>Go Elite</span>
                         <i class="fas fa-rocket"></i>
                     </button>
@@ -359,13 +359,13 @@
             </div>
 
             <div class="schedule-container">
-                <div class="schedule-filter">
+                <!-- <div class="schedule-filter">
                     <button class="filter-btn active" data-filter="all">All Classes</button>
                     <button class="filter-btn" data-filter="strength">Strength</button>
                     <button class="filter-btn" data-filter="cardio">Cardio</button>
                     <button class="filter-btn" data-filter="martial">Martial Arts</button>
                     <button class="filter-btn" data-filter="yoga">Yoga & Mobility</button>
-                </div>
+                </div> -->
 
                 <div class="schedule-grid">
                     <div class="schedule-day">
@@ -564,11 +564,11 @@
                 <h2>Ready to Begin Your <span>Elite Transformation?</span></h2>
                 <p>Choose your service and start your journey to unprecedented fitness excellence today.</p>
                 <div class="cta-buttons">
-                    <a href="../contact.html" class="btn-primary">Book Consultation</a>
-                    <a href="#packages" class="btn-secondary">
+                    <a href="../../contact.html#form" class="btn-primary">Book Consultation</a>
+                    <!-- <a href="#packages" class="btn-secondary">
                         <i class="fas fa-eye"></i>
                         View Packages
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>

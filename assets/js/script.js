@@ -8,8 +8,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             const container = document.querySelector(targetSelector);
             if (container) {
                 container.innerHTML = html;
+
+                // Fix relative links for pages in subdirectories
+                if (window.location.pathname.includes('/assets/pages/')) {
+                    const links = container.querySelectorAll('a');
+                    links.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                            if (href.startsWith('assets/pages/')) {
+                                // For links that start with assets/pages/, remove the assets/pages/ part
+                                // Example: assets/pages/terms.html becomes terms.html
+                                link.setAttribute('href', href.replace('assets/pages/', ''));
+                            } else if (!href.startsWith('../') && !href.includes('pages/')) {
+                                // For regular pages, add ../ prefix
+                                // Example: about.html becomes ../about.html
+                                link.setAttribute('href', '../' + href);
+                            }
+                        }
+                    });
+                }
+
                 console.log(`Successfully loaded ${url} into ${targetSelector}`);
-                
+
                 // Initialize header scroll effect immediately after header is loaded
                 if (targetSelector === '#site-header') {
                     setTimeout(() => {
@@ -22,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     header.classList.remove('scrolled');
                                 }
                             };
-                            
+
                             window.addEventListener('scroll', scrollHandler);
                             console.log('Header scroll effect initialized after component load');
                         }
@@ -58,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </header>
                 `;
-                
+
                 // Initialize scroll effect for fallback header too
                 setTimeout(() => {
                     const header = document.querySelector('header');
@@ -70,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 header.classList.remove('scrolled');
                             }
                         };
-                        
+
                         window.addEventListener('scroll', scrollHandler);
                         console.log('Header scroll effect initialized for fallback header');
                     }
@@ -402,7 +422,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     header.classList.remove('scrolled');
                 }
             };
-            
+
             window.addEventListener('scroll', scrollHandler);
             console.log('Header scroll effect initialized');
         } else {
@@ -821,7 +841,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         item.addEventListener('click', (e) => {
             // Only trigger booking if the item is visible (not filtered out)
             if (item.style.display === 'none') return;
-            
+
             const className = item.querySelector('h4')?.textContent || 'Unknown Class';
             const instructor = item.querySelector('p')?.textContent || 'Unknown Instructor';
             const time = item.querySelector('.class-time')?.textContent || 'Unknown Time';
@@ -1176,3 +1196,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('Enhanced index page with modern animations loaded successfully!');
 });
+
+// Global helper to route users to checkout with selected plan/service details
+window.goToCheckout = function(type, name, price, period, features) {
+    const params = new URLSearchParams({
+        type: type || '',
+        name: name || '',
+        price: price || '',
+        period: period || '',
+        features: JSON.stringify(features || [])
+    });
+
+    const isNestedPage = window.location.pathname.includes('/assets/pages/');
+    const checkoutPath = isNestedPage ? 'checkout.html' : 'assets/pages/checkout.html';
+    window.location.href = `${checkoutPath}?${params.toString()}`;
+};
