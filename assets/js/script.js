@@ -236,6 +236,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const statNumbers = document.querySelectorAll('.stat-number');
         statNumbers.forEach(stat => {
             const target = parseInt(stat.getAttribute('data-target'));
+            const suffix = stat.getAttribute('data-suffix') || '';
             const duration = 2000;
             const step = target / (duration / 16);
             let current = 0;
@@ -245,25 +246,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (current >= target) {
                     current = target;
                     clearInterval(timer);
+                    stat.textContent = Math.floor(current) + suffix;
+                } else {
+                    stat.textContent = Math.floor(current);
                 }
-                stat.textContent = Math.floor(current);
             }, 16);
         });
     }
 
-    // Trigger counter animation when hero section is in view
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        const heroObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounters();
-                    heroObserver.unobserve(entry.target);
-                }
-            });
-        });
-        heroObserver.observe(heroSection);
-    }
 
     // Program Tabs Functionality
     const programTabs = document.querySelectorAll('.program-tab');
@@ -908,7 +898,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const priceEl = entry.target;
-                const finalPrice = parseInt(priceEl.textContent.replace('$', ''));
+                const finalPrice = parseInt(priceEl.textContent.replace('£', ''));
                 animatePrice(priceEl, 0, finalPrice, 1000);
                 priceObserver.unobserve(entry.target);
             }
@@ -927,7 +917,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const progress = Math.min(elapsed / duration, 1);
 
             const current = Math.floor(start + (end - start) * progress);
-            element.textContent = '$' + current;
+            element.textContent = '£' + current;
 
             if (progress < 1) {
                 requestAnimationFrame(updatePrice);
@@ -1100,7 +1090,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 setTimeout(() => {
                     planBtn.style.transform = '';
-                    showNotification(`${planName} plan selected! Price: $${price}/mo`, 'success');
+                    showNotification(`${planName} plan selected! Price: £${price}/mo`, 'success');
 
                     // Simulate redirect to checkout
                     setTimeout(() => {

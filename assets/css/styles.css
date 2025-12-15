@@ -909,6 +909,10 @@ footer {
 
 .footer-links li {
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
 }
 
 .footer-links a {

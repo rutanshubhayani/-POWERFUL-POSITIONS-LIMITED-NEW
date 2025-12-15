@@ -135,9 +135,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (packageDesc) {
             packageDesc.textContent = packageData.description || getServiceDescription(packageData.type);
         }
-        if (packagePrice) packagePrice.textContent = `$${packageData.price}`;
+        if (packagePrice) packagePrice.textContent = `£${packageData.price}`;
         if (packagePeriod) packagePeriod.textContent = packageData.period || '/month';
-        if (subtotal) subtotal.textContent = `$${packageData.price}.00`;
+        if (subtotal) subtotal.textContent = `£${packageData.price}.00`;
 
         // Calculate total based on service type
         let setupFee = 0;
@@ -160,19 +160,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalAmount = subtotalAmount + tax;
 
         // Update UI elements
-        document.getElementById('setup-fee').textContent = `$${setupFee}.00`;
+        document.getElementById('setup-fee').textContent = `£${setupFee}.00`;
         const discountElement = document.getElementById('discount');
         const discountRow = discountElement.closest('.breakdown-item');
         
         if (discount > 0) {
-            discountElement.textContent = `-$${discount}.00`;
+            discountElement.textContent = `-£${discount}.00`;
             discountRow.style.display = 'flex';
         } else {
             discountRow.style.display = 'none';
         }
         
-        document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-        document.getElementById('total').textContent = `$${totalAmount.toFixed(2)}`;
+        document.getElementById('tax').textContent = `£${tax.toFixed(2)}`;
+        document.getElementById('total').textContent = `£${totalAmount.toFixed(2)}`;
 
         // Update features
         const featuresContainer = document.querySelector('.package-features');
