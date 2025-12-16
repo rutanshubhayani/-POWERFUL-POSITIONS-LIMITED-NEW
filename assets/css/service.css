@@ -39,6 +39,18 @@
     position: relative;
     animation: fadeInUp 1.2s ease-out;
     margin-top: 5rem;
+    text-align: center;
+}
+
+.service-hero-content .glitch-wrapper {
+    display: block;
+    text-align: center;
+    margin: 0 auto 2rem;
+}
+
+.service-hero-content .glitch {
+    display: block;
+    text-align: center;
 }
 
 .service-hero-content .hero-tag {

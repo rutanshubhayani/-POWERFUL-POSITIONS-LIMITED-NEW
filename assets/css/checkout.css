@@ -47,84 +47,66 @@
     padding: 0 20px;
 }
 
+.hero-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
 .hero-tag {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(0, 242, 234, 0.1);
-    color: var(--primary);
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    gap: 10px;
+    background: linear-gradient(130deg, rgba(0, 242, 234, 0.9), rgba(0, 174, 255, 0.9));
+    color: #002329;
+    padding: 0.9rem 1.8rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 30px;
-    border: 1px solid rgba(0, 242, 234, 0.3);
+    box-shadow: 0 15px 40px rgba(0, 242, 234, 0.25);
 }
 
-/* Glitch Effect for Title */
-.glitch-wrapper {
-    margin-bottom: 30px;
+.hero-tag i {
+    font-size: 0.95rem;
 }
 
-.glitch {
-    font-size: 3.5rem;
-    font-weight: 900;
+.checkout-title {
     text-transform: uppercase;
-    position: relative;
+    font-weight: 900;
+    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    letter-spacing: 4px;
     color: var(--text-main);
-    letter-spacing: 3px;
-    line-height: 1.1;
-    margin: 10px 0;
-    animation: glitch-skew 1s infinite linear alternate-reverse;
+    text-align: center;
+    line-height: 1.05;
 }
 
-.glitch::before,
-.glitch::after {
-    content: attr(data-text);
+.checkout-title span {
+    display: block;
+    position: relative;
+    padding: 0.15em 0;
+}
+
+.checkout-title span:first-child::after {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    left: 50%;
+    bottom: -0.4rem;
+    width: 160px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    transform: translateX(-50%);
+    border-radius: 999px;
+    opacity: 0.8;
 }
 
-.glitch::before {
-    animation: glitch-anim-1 0.5s infinite linear alternate-reverse;
+.checkout-title span:last-child {
     color: var(--primary);
-    z-index: -1;
-}
-
-.glitch::after {
-    animation: glitch-anim-2 1s infinite linear alternate-reverse;
-    color: #ff6b6b;
-    z-index: -2;
-}
-
-@keyframes glitch-anim-1 {
-    0% { clip: rect(64px, 9999px, 66px, 0); }
-    25% { clip: rect(40px, 9999px, 44px, 0); }
-    50% { clip: rect(76px, 9999px, 78px, 0); }
-    75% { clip: rect(23px, 9999px, 27px, 0); }
-    100% { clip: rect(51px, 9999px, 53px, 0); }
-}
-
-@keyframes glitch-anim-2 {
-    0% { clip: rect(65px, 9999px, 119px, 0); }
-    25% { clip: rect(52px, 9999px, 74px, 0); }
-    50% { clip: rect(35px, 9999px, 37px, 0); }
-    75% { clip: rect(39px, 9999px, 41px, 0); }
-    100% { clip: rect(72px, 9999px, 74px, 0); }
-}
-
-@keyframes glitch-skew {
-    0% { transform: skew(0deg); }
-    20% { transform: skew(2deg); }
-    40% { transform: skew(-1deg); }
-    60% { transform: skew(1deg); }
-    80% { transform: skew(-2deg); }
-    100% { transform: skew(0deg); }
+    text-shadow: 0 0 25px rgba(0, 242, 234, 0.35);
 }
 
 .hero-subtitle {

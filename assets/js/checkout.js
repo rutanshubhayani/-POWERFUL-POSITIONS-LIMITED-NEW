@@ -39,6 +39,17 @@ document.addEventListener('DOMContentLoaded', function() {
             checkoutForm.addEventListener('submit', handleFormSubmit);
         }
 
+        // Also add click listener to complete button as fallback
+        const completeButton = document.querySelector('.btn-complete');
+        if (completeButton) {
+            completeButton.addEventListener('click', function(e) {
+                console.log('Complete button clicked directly');
+                if (e.target.type !== 'submit') {
+                    handleFormSubmit(e);
+                }
+            });
+        }
+
         // Same address checkbox
         const sameAddressCheckbox = document.getElementById('sameAddress');
         if (sameAddressCheckbox) {
@@ -64,6 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Load package details from URL parameters
         loadPackageFromURL();
+        
+        // Simple test to help debug
+        setTimeout(() => {
+            const agreeTerms = document.getElementById('agreeTerms');
+            console.log('Terms checkbox found:', !!agreeTerms);
+            console.log('Terms checkbox visible:', agreeTerms ? agreeTerms.offsetParent !== null : false);
+            console.log('Terms checkbox checked:', agreeTerms ? agreeTerms.checked : false);
+        }, 1000);
     }
 
     function loadPackageFromURL() {
@@ -276,13 +295,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validateStep(step) {
         const stepElement = document.getElementById(`step-${step}`);
+        
+        // If step doesn't exist, consider it valid
+        if (!stepElement) {
+            console.log(`Step ${step} element not found, considering valid`);
+            return true;
+        }
+        
         const requiredInputs = stepElement.querySelectorAll('input[required], select[required]');
         let isValid = true;
 
         requiredInputs.forEach(input => {
+            // Only validate visible inputs
+            if (input.offsetParent === null) {
+                console.log(`Skipping validation for hidden input: ${input.name || input.id}`);
+                return;
+            }
+            
             if (!input.value.trim()) {
                 isValid = false;
                 input.classList.add('error');
+                console.log(`Validation failed for ${input.name || input.id}: empty value`);
                 
                 // Remove error class after 3 seconds
                 setTimeout(() => {
@@ -298,27 +331,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('email');
             const phone = document.getElementById('phone');
             
-            if (email && !isValidEmail(email.value)) {
+            if (email && email.offsetParent !== null && !isValidEmail(email.value)) {
                 isValid = false;
                 email.classList.add('error');
+                console.log('Email validation failed');
             }
             
-            if (phone && !isValidPhone(phone.value)) {
+            if (phone && phone.offsetParent !== null && !isValidPhone(phone.value)) {
                 isValid = false;
                 phone.classList.add('error');
+                console.log('Phone validation failed');
             }
         }
 
         if (step === 3) {
             const agreeTerms = document.getElementById('agreeTerms');
-            if (agreeTerms && !agreeTerms.checked) {
+            if (agreeTerms && agreeTerms.offsetParent !== null && !agreeTerms.checked) {
                 isValid = false;
                 agreeTerms.closest('.checkbox-group').classList.add('error');
+                console.log('Terms agreement validation failed');
+                
+                // Show alert to help user understand what's required
+                alert('Please agree to the Terms & Conditions to continue.');
+                
                 setTimeout(() => {
                     agreeTerms.closest('.checkbox-group').classList.remove('error');
                 }, 3000);
             }
         }
+
+        // Log validation results for debugging
+        console.log(`Step ${step} validation:`, isValid);
 
         return isValid;
     }
@@ -381,11 +424,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleFormSubmit(e) {
         e.preventDefault();
+        console.log('Form submit triggered, current step:', currentStep);
         
-        if (!validateStep(currentStep)) {
-            return;
+        // Temporarily disable required attribute for hidden fields to prevent browser validation issues
+        const hiddenRequiredFields = [];
+        document.querySelectorAll('input[required], select[required]').forEach(field => {
+            if (field.offsetParent === null) { // Field is hidden
+                hiddenRequiredFields.push(field);
+                field.removeAttribute('required');
+                console.log('Temporarily disabled required for hidden field:', field.name || field.id);
+            }
+        });
+        
+        // Validate all steps before final submission
+        let allStepsValid = true;
+        
+        // Check step 1 validation
+        const step1Valid = validateStep(1);
+        console.log('Step 1 validation:', step1Valid);
+        
+        // Check step 2 validation (if step 2 exists)
+        const step2Element = document.getElementById('step-2');
+        let step2Valid = true;
+        if (step2Element) {
+            step2Valid = validateStep(2);
+            console.log('Step 2 validation:', step2Valid);
         }
-
+        
+        // Check step 3 validation
+        const step3Valid = validateStep(3);
+        console.log('Step 3 validation:', step3Valid);
+        
+        allStepsValid = step1Valid && step2Valid && step3Valid;
+        
+        // Re-enable required attributes for hidden fields
+        hiddenRequiredFields.forEach(field => {
+            field.setAttribute('required', '');
+        });
+        
+        if (!allStepsValid) {
+            console.log('Validation failed. Redirecting to first invalid step...');
+            
+            // Navigate to first invalid step
+            if (!step1Valid) {
+                currentStep = 1;
+                showStep(currentStep);
+                return;
+            } else if (!step2Valid) {
+                currentStep = 2;
+                showStep(currentStep);
+                return;
+            } else if (!step3Valid) {
+                currentStep = 3;
+                showStep(currentStep);
+                return;
+            }
+        }
+        
+        console.log('All validations passed, processing payment...');
         const submitButton = document.querySelector('.btn-complete');
         
         // Show loading state
