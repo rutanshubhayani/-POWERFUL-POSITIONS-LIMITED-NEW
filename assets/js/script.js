@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Load header and footer components first (for all pages)
+    let headerScrollListenerAttached = false;
+
     async function loadComponent(targetSelector, url) {
         try {
             const resp = await fetch(url);
@@ -9,19 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (container) {
                 container.innerHTML = html;
 
-                // Fix relative links for pages in subdirectories
                 if (window.location.pathname.includes('/assets/pages/')) {
                     const links = container.querySelectorAll('a');
                     links.forEach(link => {
                         const href = link.getAttribute('href');
                         if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
                             if (href.startsWith('assets/pages/')) {
-                                // For links that start with assets/pages/, remove the assets/pages/ part
-                                // Example: assets/pages/terms.html becomes terms.html
                                 link.setAttribute('href', href.replace('assets/pages/', ''));
                             } else if (!href.startsWith('../') && !href.includes('pages/')) {
-                                // For regular pages, add ../ prefix
-                                // Example: about.html becomes ../about.html
                                 link.setAttribute('href', '../' + href);
                             }
                         }
@@ -29,157 +25,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 console.log(`Successfully loaded ${url} into ${targetSelector}`);
-
-                // Initialize header scroll effect immediately after header is loaded
-                if (targetSelector === '#site-header') {
-                    setTimeout(() => {
-                        const header = document.querySelector('header');
-                        if (header) {
-                            const scrollHandler = () => {
-                                if (window.scrollY > 50) {
-                                    header.classList.add('scrolled');
-                                } else {
-                                    header.classList.remove('scrolled');
-                                }
-                            };
-
-                            window.addEventListener('scroll', scrollHandler);
-                            console.log('Header scroll effect initialized after component load');
-                        }
-                        initMobileNav();
-                    }, 50);
-                }
             }
         } catch (err) {
             console.error('Error loading component:', err);
-            // Fallback: If component loading fails, show a basic error message
-            const container = document.querySelector(targetSelector);
-            if (container && targetSelector === '#site-header') {
-                container.innerHTML = `
-                    <header>
-                        <div class="container nav-wrapper">
-                            <a href="index.html" class="logo">
-                                <i class="fas fa-bolt"></i>
-                                POWERFUL POSITION
-                            </a>
-                            <button class="menu-toggle" aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                            <ul class="nav-links">
-                                <li><a href="index.html#home">Home</a></li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="assets/pages/service.html">Services</a></li>
-                                <li><a href="index.html#pricing">Pricing</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
-                            <a href="index.html#join" class="btn-primary">Join Now</a>
-                        </div>
-                    </header>
-                `;
-
-                // Initialize scroll effect for fallback header too
-                setTimeout(() => {
-                    const header = document.querySelector('header');
-                    if (header) {
-                        const scrollHandler = () => {
-                            if (window.scrollY > 50) {
-                                header.classList.add('scrolled');
-                            } else {
-                                header.classList.remove('scrolled');
-                            }
-                        };
-
-                        window.addEventListener('scroll', scrollHandler);
-                        console.log('Header scroll effect initialized for fallback header');
-                    }
-                    initMobileNav();
-                }, 50);
-            }
         }
     }
 
-    let mobileNavInitialized = false;
-    function initMobileNav() {
-        if (mobileNavInitialized) return;
-        const header = document.querySelector('header');
-        if (!header) return;
-        const toggle = header.querySelector('.menu-toggle');
-        const navLinks = header.querySelector('.nav-links');
-        if (!toggle || !navLinks) return;
-
-        const closeMenu = () => header.classList.remove('nav-open');
-
-        toggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            header.classList.toggle('nav-open');
-        });
-
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 900) {
-                    closeMenu();
-                }
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!header.contains(e.target)) {
-                closeMenu();
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 900) {
-                closeMenu();
-            }
-        });
-
-        mobileNavInitialized = true;
-    }
-
-    function setActiveNavLink() {
-        const navLinks = document.querySelectorAll('.nav-links a');
-        if (!navLinks.length) return;
-
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-        const currentHash = window.location.hash;
-        let activeAssigned = false;
-
-        navLinks.forEach(link => {
-            const url = new URL(link.getAttribute('href'), window.location.href);
-            const linkPath = url.pathname.split('/').pop() || 'index.html';
-            const linkHash = url.hash;
-            let isActive = false;
-
-            if (linkPath === currentPath) {
-                if (linkHash) {
-                    if (currentHash) {
-                        isActive = currentHash === linkHash;
-                    } else if (linkHash === '#home') {
-                        isActive = true;
-                    }
-                } else {
-                    isActive = !currentHash || currentPath !== 'index.html';
-                }
-            }
-
-            if (isActive && !activeAssigned) {
-                link.classList.add('active');
-                activeAssigned = true;
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-
-    // Load components for all pages (handle nested directories)
     const pathPrefix = window.location.pathname.includes('/assets/pages/') ? '../' : '';
+    ensureHeaderStyles(pathPrefix);
     await loadComponent('#site-header', `${pathPrefix}assets/component/header.html`);
+    initHeaderInteractions();
     await loadComponent('#site-footer', `${pathPrefix}assets/component/footer.html`);
-    setActiveNavLink();
-    window.addEventListener('hashchange', setActiveNavLink);
 
     // Loading Screen Animation - Only for index page
     const loadingScreen = document.getElementById('loadingScreen');
@@ -1185,6 +1041,98 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     console.log('Enhanced index page with modern animations loaded successfully!');
+    function ensureHeaderStyles(pathPrefix) {
+        if (document.getElementById('header-stylesheet')) return;
+        const headerLink = document.createElement('link');
+        headerLink.rel = 'stylesheet';
+        headerLink.href = `${pathPrefix}assets/css/header.css`;
+        headerLink.id = 'header-stylesheet';
+        document.head.appendChild(headerLink);
+    }
+
+    function handleHeaderScroll() {
+        const header = document.querySelector('.main-header');
+        if (!header) return;
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    function initHeaderInteractions() {
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const body = document.body;
+
+        if (mobileToggle && mobileMenu) {
+            const openMenu = () => {
+                mobileMenu.classList.add('active');
+                mobileToggle.classList.add('active');
+                body.classList.add('menu-open');
+            };
+
+            const closeMenu = () => {
+                mobileMenu.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                body.classList.remove('menu-open');
+            };
+
+            mobileToggle.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.contains('active');
+                if (isOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link, .mobile-btn-join');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) {
+                    closeMenu();
+                }
+            });
+        }
+
+        const navLinks = document.querySelectorAll('[data-page]');
+        const currentNavKey = getCurrentNavKey();
+
+        navLinks.forEach(link => {
+            if (link.dataset.page === currentNavKey) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
+        if (!headerScrollListenerAttached) {
+            window.addEventListener('scroll', handleHeaderScroll);
+            headerScrollListenerAttached = true;
+        }
+        handleHeaderScroll();
+    }
+
+    function getCurrentNavKey() {
+        const path = window.location.pathname.toLowerCase();
+        if (path.endsWith('/') || path.endsWith('/index.html')) {
+            return 'home';
+        }
+        if (path.includes('/about')) {
+            return 'about';
+        }
+        if (path.includes('/service')) {
+            return 'services';
+        }
+        if (path.includes('/contact')) {
+            return 'contact';
+        }
+        return '';
+    }
 });
 
 // Global helper to route users to checkout with selected plan/service details

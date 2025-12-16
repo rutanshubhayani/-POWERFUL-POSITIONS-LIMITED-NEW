@@ -1,23 +1,512 @@
- <header>
-        <div class="container nav-wrapper">
-            <a href="index.html" class="logo">
-                <i class="fas fa-bolt"></i>
-                POWERFUL POSITION
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="assets/pages/service.html">Services</a></li>
-                <!-- <li><a href="index.html#pricing">Pricing</a></li> -->
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="mobile-menu">
-                <button class="menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+<header class="main-header"></header>
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-content">
+            <!-- Logo -->
+            <div class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <i class="fas fa-bolt"></i>
+                    <span class="logo-text">POWERFUL POSITION</span>
+                </a>
             </div>
-            <a href="index.html#join" class="btn-primary desktop-join-btn">Join Now</a>
+
+            <!-- Desktop Navigation -->
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link" data-page="home">
+                        <span>Home</span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link" data-page="about">
+                        <span>About</span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="assets/pages/service.html" class="nav-link" data-page="services">
+                        <span>Services</span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link" data-page="contact">
+                        <span>Contact</span>
+                        <div class="nav-underline"></div>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- CTA Button -->
+            <div class="nav-cta">
+                <a href="contact.html#form" class="btn-join">
+                    <span>JOIN NOW</span>
+                    <!-- <i class="fas fa-arrow-right"></i> -->
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-toggle" id="mobileToggle">
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+                <span class="toggle-line"></span>
+            </button>
         </div>
-    </header>  
+    </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-content">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item">
+                <a href="index.html" class="mobile-nav-link" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="about.html" class="mobile-nav-link" data-page="about">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="assets/pages/service.html" class="mobile-nav-link" data-page="services">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>Services</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="contact.html" class="mobile-nav-link" data-page="contact">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+        <div class="mobile-cta">
+            <a href="contact.html#form" class="mobile-btn-join">
+                <span>JOIN NOW</span>
+                <i class="fas fa-bolt"></i>
+            </a>
+        </div>
+    </div>
+</div>
+</header>
+
+<script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const body = document.body;
+
+        if (mobileToggle && mobileMenu) {
+            mobileToggle.addEventListener('click', function () {
+                const isOpen = mobileMenu.classList.contains('active');
+
+                if (isOpen) {
+                    mobileMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    body.classList.remove('menu-open');
+                } else {
+                    mobileMenu.classList.add('active');
+                    mobileToggle.classList.add('active');
+                    body.classList.add('menu-open');
+                }
+            });
+
+            // Close menu when clicking on links
+            const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link, .mobile-btn-join');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    body.classList.remove('menu-open');
+                });
+            });
+
+            // Close menu when clicking outside
+            mobileMenu.addEventListener('click', function (e) {
+                if (e.target === mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    body.classList.remove('menu-open');
+                }
+            });
+        }
+
+        // Active page highlighting
+        const currentPage = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (currentPage.includes(href) || (href === 'index.html' && currentPage === '/'))) {
+                link.classList.add('active');
+            }
+        });
+
+        // Header scroll effect
+        const header = document.querySelector('.main-header');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            // Add scrolled class for styling when scrolling past 100px
+            if (currentScrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            // Keep header pinned/visible at all times - no hiding behavior
+        });
+    });
+</script>
+
+<style>
+    /* Header Styles */
+    .main-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.15);
+        backdrop-filter: blur(30px);
+        border-bottom: 1px solid rgba(0, 242, 234, 0.15);
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(0) !important;
+        will-change: transform, background, box-shadow;
+        /* Keep header pinned at all times - always visible */
+    }
+
+    .main-header.scrolled {
+        background: rgba(10, 10, 10, 0.45);
+        border-bottom: 1px solid rgba(0, 242, 234, 0.35);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Header stays pinned - no hiding behavior */
+    /* .main-header.hidden {
+    transform: translateY(-100%);
+} */
+
+    .navbar {
+        padding: 0;
+    }
+
+    .nav-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+        min-height: 80px;
+    }
+
+    /* Logo */
+    .nav-logo .logo-link {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        transition: var(--transition);
+    }
+
+    .nav-logo .logo-link:hover {
+        color: var(--primary);
+    }
+
+    .nav-logo .fas {
+        color: var(--primary);
+        font-size: 2rem;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Desktop Navigation */
+    .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-item {
+        position: relative;
+    }
+
+    .nav-link {
+        display: block;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        position: relative;
+        transition: var(--transition);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--primary);
+    }
+
+    .nav-underline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover .nav-underline,
+    .nav-link.active .nav-underline {
+        width: 100%;
+    }
+
+    /* CTA Button */
+    .btn-join {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, var(--primary), #00d4d4);
+        color: var(--bg-dark);
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(0, 242, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-join::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-join:hover::before {
+        left: 100%;
+    }
+
+    .btn-join:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 242, 234, 0.4);
+    }
+
+    /* Mobile Toggle */
+    .mobile-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 1001;
+    }
+
+    .toggle-line {
+        width: 25px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-toggle.active .toggle-line:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .mobile-toggle.active .toggle-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-toggle.active .toggle-line:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 999;
+        display: none;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .mobile-menu.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .mobile-menu-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 2rem;
+    }
+
+    .mobile-nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .mobile-nav-item {
+        margin-bottom: 2rem;
+    }
+
+    .mobile-nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        padding: 1rem 2rem;
+        border-radius: 10px;
+    }
+
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+        color: var(--primary);
+        background: rgba(0, 242, 234, 0.1);
+    }
+
+    .mobile-cta {
+        margin-top: 2rem;
+    }
+
+    .mobile-btn-join {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        background: linear-gradient(135deg, var(--primary), #00d4d4);
+        color: var(--bg-dark);
+        text-decoration: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        box-shadow: 0 10px 30px rgba(0, 242, 234, 0.4);
+    }
+
+    .mobile-btn-join:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 242, 234, 0.5);
+    }
+
+    /* Animations */
+    @keyframes pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    /* Body scroll lock */
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .nav-menu {
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .nav-menu,
+        .nav-cta {
+            display: none;
+        }
+
+        .mobile-toggle {
+            display: flex;
+        }
+
+        .nav-content {
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+
+        .nav-logo .logo-link {
+            font-size: 1.3rem;
+        }
+
+        .nav-logo .fas {
+            font-size: 1.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .mobile-nav-link {
+            font-size: 1.3rem;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .mobile-btn-join {
+            font-size: 1.1rem;
+            padding: 0.8rem 1.8rem;
+        }
+
+        .nav-logo .logo-link {
+            font-size: 1.1rem;
+        }
+
+        .nav-logo .fas {
+            font-size: 1.6rem;
+        }
+    }
+</style>

@@ -489,7 +489,54 @@
             });
         });
 
-        // Header and footer loading
+        // Initialize mobile menu functionality
+        function initMobileMenu() {
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const body = document.body;
+
+            if (mobileToggle && mobileMenu) {
+                // Check if already initialized to avoid duplicate listeners
+                if (mobileToggle.dataset.initialized !== 'true') {
+                    mobileToggle.dataset.initialized = 'true';
+
+                    mobileToggle.addEventListener('click', function() {
+                        const isOpen = mobileMenu.classList.contains('active');
+                        
+                        if (isOpen) {
+                            mobileMenu.classList.remove('active');
+                            mobileToggle.classList.remove('active');
+                            body.classList.remove('menu-open');
+                        } else {
+                            mobileMenu.classList.add('active');
+                            mobileToggle.classList.add('active');
+                            body.classList.add('menu-open');
+                        }
+                    });
+
+                    // Close menu when clicking on links
+                    const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link, .mobile-btn-join');
+                    mobileLinks.forEach(link => {
+                        link.addEventListener('click', () => {
+                            mobileMenu.classList.remove('active');
+                            mobileToggle.classList.remove('active');
+                            body.classList.remove('menu-open');
+                        });
+                    });
+
+                    // Close menu when clicking outside
+                    mobileMenu.addEventListener('click', function(e) {
+                        if (e.target === mobileMenu) {
+                            mobileMenu.classList.remove('active');
+                            mobileToggle.classList.remove('active');
+                            body.classList.remove('menu-open');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Header loading
         fetch('../component/header.html')
             .then(response => response.text())
             .then(data => {
@@ -497,6 +544,7 @@
                 // Fix service page links within same directory
                 data = data.replace(/href="assets\/pages\/service\.html/g, 'href="service.html');
                 data = data.replace(/href="assets\/pages\/terms\.html/g, 'href="terms.html');
+                data = data.replace(/href="assets\/pages\/checkout\.html/g, 'href="checkout.html');
                 
                 // Fix root level pages - need ../../ to go up two levels from /assets/pages/
                 data = data.replace(/href="index\.html/g, 'href="../../index.html');
@@ -507,8 +555,12 @@
                 data = data.replace(/href="index\.html#/g, 'href="../../index.html#');
                 
                 document.getElementById('site-header').innerHTML = data;
+                
+                // Initialize mobile menu after header is loaded
+                initMobileMenu();
             });
 
+        // Footer loading
         fetch('../component/footer.html')
             .then(response => response.text())
             .then(data => {
